@@ -1,54 +1,47 @@
-// webpack.prod.js
+// webpack.config.js
 const path = require("path");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TerserWebpackPlugin = require("terser-webpack-plugin");
-const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const { DefinePlugin } = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 
-const AutoImport = require('unplugin-auto-import/webpack')
-const Components = require('unplugin-vue-components/webpack')
-const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserWebpackPlugin = require("terser-webpack-plugin");
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 
-const isProduction=process.env.NODE_ENV === "production";
+
+
+// 需要通过 cross-env 定义环境变量
+const isProduction = process.env.NODE_ENV === "production";
 
 const getStyleLoaders = (preProcessor) => {
   return [
-    isProduction ? MiniCssExtractPlugin.loader:"vue-style-loader",
+    isProduction ? MiniCssExtractPlugin.loader : "vue-style-loader",
     "css-loader",
     {
       loader: "postcss-loader",
       options: {
         postcssOptions: {
-          plugins: [
-            "postcss-preset-env", // 能解决大多数样式兼容性问题
-          ],
+          plugins: ["postcss-preset-env"],
         },
       },
     },
-     preProcessor 
-     && {
-      loader: preProcessor,
-      options:
-        preProcessor ==="sass-loader" 
-        ? {
-          additionalData: `@use "@/styles/element/index.scss" as *;`,
-        } 
-        :{},
-    },
+    preProcessor,
   ].filter(Boolean);
 };
 
 module.exports = {
   entry: "./src/main.js",
   output: {
-    path: isProduction ? path.resolve(__dirname, "../dist"): undefined,
-    filename: isProduction ? "static/js/[name].[contenthash:10].js" :"static/js/[name].js",
-    chunkFilename: isProduction ? "static/js/[name].[contenthash:10].chunk.js" :"static/js/[name].chunk.js",
+    path: isProduction ? path.resolve(__dirname, "../dist") : undefined,
+    filename: isProduction
+        ? "static/js/[name].[contenthash:10].js"
+        : "static/js/[name].js",
+    chunkFilename: isProduction
+        ? "static/js/[name].[contenthash:10].chunk.js"
+        : "static/js/[name].chunk.js",
     assetModuleFilename: "static/js/[hash:10][ext][query]",
     clean: true,
   },
@@ -69,7 +62,7 @@ module.exports = {
         use: getStyleLoaders("sass-loader"),
       },
       {
-        test: /\.styl$/,
+        test: /\.styl(us)?$/,
         use: getStyleLoaders("stylus-loader"),
       },
       {
@@ -93,7 +86,7 @@ module.exports = {
           cacheDirectory: true,
           cacheCompression: false,
           plugins: [
-             "@babel/plugin-transform-runtime" // presets中包含了
+            // "@babel/plugin-transform-runtime" // presets中包含了
           ],
         },
       },
@@ -104,8 +97,8 @@ module.exports = {
         options: {
           // 开启缓存
           cacheDirectory: path.resolve(
-            __dirname,
-            "node_modules/.cache/vue-loader"
+              __dirname,
+              "node_modules/.cache/vue-loader"
           ),
         },
       },
@@ -117,14 +110,14 @@ module.exports = {
       exclude: "node_modules",
       cache: true,
       cacheLocation: path.resolve(
-        __dirname,
-        "../node_modules/.cache/.eslintcache"
+          __dirname,
+          "../node_modules/.cache/.eslintcache"
       ),
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "../public/index.html"),
     }),
-    isProduction && new CopyPlugin({
+    new CopyPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, "../public"),
@@ -140,7 +133,8 @@ module.exports = {
         },
       ],
     }),
-    isProduction && new MiniCssExtractPlugin({
+    isProduction &&
+    new MiniCssExtractPlugin({
       filename: "static/css/[name].[contenthash:10].css",
       chunkFilename: "static/css/[name].[contenthash:10].chunk.css",
     }),
@@ -148,20 +142,12 @@ module.exports = {
     new DefinePlugin({
       __VUE_OPTIONS_API__: "true",
       __VUE_PROD_DEVTOOLS__: "false",
+      // 注意：这里设置为false以优化生产环境的构建，减少代码体积
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
     }),
-    AutoImport({
-      resolvers: [ElementPlusResolver()],
-    }),
-    Components({
-      resolvers: [ElementPlusResolver({
-            // 自定义主题，引入sass
-            importStyle: "sass",
-      })],
-    }),
-
   ].filter(Boolean),
   optimization: {
-    minimize:isProduction,
+    minimize: isProduction,
     // 压缩的操作
     minimizer: [
       new CssMinimizerPlugin(),
@@ -196,38 +182,18 @@ module.exports = {
     ],
     splitChunks: {
       chunks: "all",
-      cacheGroups:{
-        vue:{
-          test:/[\\/]node_modules[\\/]vue(.*)?[\\/]/,
-          name:'vue',
-          priority:40
-        },
-        elementPlus:{
-          test:/[\\/]node_modules[\\/]element-plus(.*)?[\\/]/,
-          name:'elementPlus-chunk',
-          priority:30
-        },
-        libs: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "libs-chunk",
-          priority: 20,
-        },
-      }
-    }, 
+    },
     runtimeChunk: {
-      name: (entrypoint) => `runtime~${entrypoint.name}`,
+      name: (entrypoint) => `runtime~${entrypoint.name}.js`,
     },
   },
   resolve: {
     extensions: [".vue", ".js", ".json"],
-    //路径别名
-    alias:{
-      "@": path.resolve(__dirname,"../src"),
-    }
+    alias: {
+      // 路径别名
+      "@": path.resolve(__dirname, "../src"),
+    },
   },
-  mode: isProduction ?"production" :"development",
-  devtool: isProduction ? "cheap-module-source-map": "source-map",
-  
   devServer: {
     open: true,
     host: "localhost",
@@ -236,5 +202,9 @@ module.exports = {
     compress: true,
     historyApiFallback: true, // 解决vue-router刷新404问题
   },
-   performance:false,
+  mode: isProduction ? "production" : "development",
+  devtool: isProduction ? "source-map" : "cheap-module-source-map",
+  stats: {
+    errorDetails: true,
+  },
 };

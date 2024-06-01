@@ -355,10 +355,9 @@ export default {
   },
   setup() {
     const onSwiper = (swiper) => {
-      console.log(swiper);
+
     };
     const onSlideChange = () => {
-      console.log('slide change');
     };
     return {
       onSwiper,
@@ -510,11 +509,11 @@ export default {
                         &:last-child
                           margin-right: 0
                         &.on
-                          bg-image('/src/pages/MSite/images/stars/star48_on')
+                          bg-image('../../pages/MSite/images/stars/star48_on')
                         &.half
-                          bg-image('/src/pages/MSite/images/stars/star48_half')
+                          bg-image('../../pages/MSite/images/stars/star48_half')
                         &.off
-                          bg-image('/src/pages/MSite/images/stars/star48_off')
+                          bg-image('../../pages/MSite/images/stars/star48_off')
                     &.star-36
                       .star-item
                         width 15px
@@ -524,11 +523,11 @@ export default {
                         &:last-child
                           margin-right 0
                         &.on
-                          bg-image('/src/pages/MSite/images/stars/star36_on')
+                          bg-image('../../pages/MSite/images/stars/star36_on')
                         &.half
-                          bg-image('/src/pages/MSite/images/stars/star36_half')
+                          bg-image('../../pages/MSite/images/stars/star36_half')
                         &.off
-                          bg-image('/src/pages/MSite/images/stars/star36_off')
+                          bg-image('../../pages/MSite/images/stars/star36_off')
                     &.star-24
                       .star-item
                         width 10px
@@ -538,11 +537,11 @@ export default {
                         &:last-child
                           margin-right 0
                         &.on
-                          bg-image('/src/pages/MSite/images/stars/star24_on')
+                          bg-image('../../pages/MSite/images/stars/star24_on')
                         &.half
-                          bg-image('/src/pages/MSite/images/stars/star24_half')
+                          bg-image('../../pages/MSite/images/stars/star24_half')
                         &.off
-                          bg-image('/src/pages/MSite/images/stars/star24_off')
+                          bg-image('../../pages/MSite/images/stars/star24_off')
                   .rating_section
                     float left
                     font-size 10px

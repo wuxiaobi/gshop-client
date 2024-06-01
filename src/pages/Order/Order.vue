@@ -20,16 +20,17 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+@import "../../common/stylus/mixins.styl"
   .order  //订单
     width 100%
     .header
-    background-color #02a774
-    position fixed
-    z-index 100
-    left 0
-    top 0
-    width 100%
-    height 45px
+      background-color #02a774
+      position fixed
+      z-index 100
+      left 0
+      top 0
+      width 100%
+      height 45px
     .header_search
       position absolute
       left 15px

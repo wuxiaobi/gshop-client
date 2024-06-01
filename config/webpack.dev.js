@@ -97,8 +97,8 @@ module.exports = {
       exclude: "node_modules",
       cache: true,
       cacheLocation: path.resolve(
-        __dirname,
-        "../node_modules/.cache/.eslintcache"
+          __dirname,
+          "../node_modules/.cache/.eslintcache"
       ),
     }),
     new HtmlWebpackPlugin({
@@ -129,8 +129,7 @@ module.exports = {
        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,     
     }),
   ],
-  mode: "development",
-  devtool: "cheap-module-source-map",
+
   optimization: {
     splitChunks: {
       chunks: "all",
@@ -154,5 +153,6 @@ module.exports = {
     compress: true,
     historyApiFallback: true, // 解决vue-router刷新404问题
   },
-
+  mode: "development",
+  devtool: "cheap-module-source-map",
 };
