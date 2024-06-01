@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvue_cli=self.webpackChunkvue_cli||[]).push([[632],{6632:(e,u,t)=>{t.r(u),t.d(u,{default:()=>a});var c=t(641),n={class:"abouttitle"};const s={name:"About"};const a=(0,t(6262).A)(s,[["render",function(e,u,t,s,a,l){return(0,c.uX)(),(0,c.CE)("h1",n,"About")}]])}}]);
