@@ -1,14 +1,17 @@
-// webpack.prod.js
+// webpack.config.js
 const path = require("path");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { VueLoaderPlugin } = require("vue-loader");
+const { DefinePlugin } = require("webpack");
+const CopyPlugin = require("copy-webpack-plugin");
+
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
-const { VueLoaderPlugin } = require("vue-loader");
-const { DefinePlugin } = require("webpack");
-const CopyPlugin = require("copy-webpack-plugin");
+
+
 
 const getStyleLoaders = (preProcessor) => {
   return [
@@ -18,9 +21,7 @@ const getStyleLoaders = (preProcessor) => {
       loader: "postcss-loader",
       options: {
         postcssOptions: {
-          plugins: [
-            "postcss-preset-env", // 能解决大多数样式兼容性问题
-          ],
+          plugins: ["postcss-preset-env"],
         },
       },
     },
@@ -31,7 +32,7 @@ const getStyleLoaders = (preProcessor) => {
 module.exports = {
   entry: "./src/main.js",
   output: {
-    path: undefined,
+    path:  path.resolve(__dirname, "../dist") ,
     filename: "static/js/[name].[contenthash:10].js",
     chunkFilename: "static/js/[name].[contenthash:10].chunk.js",
     assetModuleFilename: "static/js/[hash:10][ext][query]",
@@ -89,8 +90,8 @@ module.exports = {
         options: {
           // 开启缓存
           cacheDirectory: path.resolve(
-            __dirname,
-            "node_modules/.cache/vue-loader"
+              __dirname,
+              "node_modules/.cache/vue-loader"
           ),
         },
       },
@@ -102,8 +103,8 @@ module.exports = {
       exclude: "node_modules",
       cache: true,
       cacheLocation: path.resolve(
-        __dirname,
-        "../node_modules/.cache/.eslintcache"
+          __dirname,
+          "../node_modules/.cache/.eslintcache"
       ),
     }),
     new HtmlWebpackPlugin({
@@ -133,9 +134,12 @@ module.exports = {
     new DefinePlugin({
       __VUE_OPTIONS_API__: "true",
       __VUE_PROD_DEVTOOLS__: "false",
+      // 注意：这里设置为false以优化生产环境的构建，减少代码体积
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
     }),
-  ],
+  ].filter(Boolean),
   optimization: {
+    minimize: true,
     // 压缩的操作
     minimizer: [
       new CssMinimizerPlugin(),
@@ -172,12 +176,20 @@ module.exports = {
       chunks: "all",
     },
     runtimeChunk: {
-      name: (entrypoint) => `runtime~${entrypoint.name}`,
+      name: (entrypoint) => `runtime~${entrypoint.name}.js`,
     },
   },
   resolve: {
     extensions: [".vue", ".js", ".json"],
+    alias: {
+      // 路径别名
+      "@": path.resolve(__dirname, "../src"),
+    },
   },
-  mode: "production",
-  devtool: "source-map",
+
+  mode: "production" ,
+  devtool:  "source-map" ,
+  stats: {
+    errorDetails: true,
+  },
 };

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkvue_cli=self.webpackChunkvue_cli||[]).push([[969],{969:(e,u,c)=>{c.r(u),c.d(u,{default:()=>l});var n=c(641),s={class:"hometitle"};const t={name:"Home"};const l=(0,c(6262).A)(t,[["render",function(e,u,c,t,l,r){return(0,n.uX)(),(0,n.CE)("h1",s,"Home")}]])}}]);
