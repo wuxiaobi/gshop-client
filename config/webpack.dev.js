@@ -141,6 +141,10 @@ module.exports = {
   },
   resolve: {
     extensions: [".vue", ".js", ".json"], // 自动补全文件扩展名，让vue可以使用
+    alias: {
+      // 路径别名
+      "@": path.resolve(__dirname, "../src"),
+    },
   },
   devServer: {
     open: true,
