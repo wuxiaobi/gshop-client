@@ -8,6 +8,7 @@ import MSite from '../pages/MSite/MSite.vue';
 import Order from '../pages/Order/Order.vue'
 import Profile from '../pages/Profile/Profile.vue'
 import Search from '../pages/Search/Search.vue'
+import Login from "../pages/Login/Login.vue";
 // const MSite=()=> import('../pages/MSite/MSite.vue')
 // const Order=()=> import('../pages/Order/Order.vue')
 // const Profile=()=> import('../pages/Profile/Profile.vue')
@@ -18,23 +19,39 @@ export default createRouter({
     routes:[
         {
             path:'/msite',
-            component:MSite
+            component:MSite,
+            meta:{
+                showFooter:true
+            }
         },
         {
             path:'/order',
-            component:Order
+            component:Order,
+            meta:{
+                showFooter:true
+            }
         },
         {
             path:'/profile',
-            component:Profile
+            component:Profile,
+            meta:{
+                showFooter:true
+            }
         },
         {
             path:'/search',
-            component:Search
+            component:Search,
+            meta:{
+                showFooter:true
+            }
         },
         {
             path:'/',
-            redirect:'/msite'
+            redirect:'/msite',
+        },
+        {
+            path:'/login',
+            component:Login
         },
     ]
 })
